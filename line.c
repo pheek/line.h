@@ -88,7 +88,7 @@ void enlargeBuffer() {
  */
 void ensureCapacity(size_t requestedLineLength) {
 	size_t requestedBufferSize = requestedLineLength + 1;
-	if(BUFFSIZE < requestedBufferSize + 1) {
+	if(BUFFSIZE < requestedBufferSize) {
 		enlargeBuffer();
 	}
 }
