@@ -2,11 +2,8 @@
  * Line-Reader (for any line length in the input file)
  * @author phi@gress.ly
  * @date   2018-11-15
+ * @host   https://github.com/pheek/line.h
  */
-
-
-//#include <stdio.h>
-//#include <stdlib.h>
 
 // Nur, damit line.h nich mehrfach "include"t wird:
 #ifndef  LINE_H
@@ -57,9 +54,9 @@ size_t calcNewSize() {
  * brain since about 35 years. I have not 
  * forgotten, what these clever guys did!
  * I didn't even open my book, which I still have!
- * But actually not quiet sure, what happens, if no 0-termination is reached ?!
  */
 void copyBuffer(char* from, char* to) {
+	from[BUFFSIZE-1]=0; // ensure buffer end; so the while will terminate.
 	while(*to++ = *from++) {}
 }
 
@@ -68,10 +65,10 @@ void copyBuffer(char* from, char* to) {
  * and copies the content to the new buffer.
  */
 void enlargeBuffer() {
-	size_t newSize   = calcNewSize();
-	char * newBuffer = malloc(newSize);
+	size_t newBuffSize = calcNewSize();
+	char * newBuffer   = malloc(newBuffSize);
 	copyBuffer(BUFFER, newBuffer);
-	BUFFSIZE = newSize;
+	BUFFSIZE = newBuffSize;
 	free(BUFFER);
 	BUFFER = newBuffer;
 }
@@ -79,7 +76,7 @@ void enlargeBuffer() {
 
 void ensureCapacity(size_t geforderteLineLength) {
 	size_t geforderteBufferGroesse = geforderteLineLength + 1;
-	if(BUFFSIZE < geforderteLineLength) {
+	if(BUFFSIZE < geforderteLineLength+1) {
 		enlargeBuffer();
 	}
 }
@@ -92,7 +89,6 @@ char* get_line(FILE *filePointer) {
 	int pos = 0;
 	int getcResult = getc(filePointer);
 	while((EOF != getcResult) && ('\n' != getcResult)) {
-		BUFFER[pos] = 0; // end buffer to ensure the copy will end.
 		ensureCapacity(pos+1);
 		BUFFER[pos] = (char) getcResult;
 		pos++;

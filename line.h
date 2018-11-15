@@ -4,6 +4,7 @@
  *
  * @author phi@gress.ly
  * @date   2018-11-15
+ * @host   https://github.com/pheek/line.h
  */
 
 #ifndef  LINE_H
