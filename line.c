@@ -32,13 +32,14 @@ int BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
  * to give the allocated memory back to the heap.
  */
 void initBuffer() {
-	BUFFER   = (char*) malloc(INITIAL_LINE_SIZE+1); // allow
-	BUFFSIZE = INITIAL_LINE_SIZE+1;
+	BUFFSIZE = INITIAL_LINE_SIZE+1     ; // space for 0-terminator 
+	BUFFER   = (char*) malloc(BUFFSIZE); 
 }
 
 
 /**
- * Calculates a new size, if the buffer is too small.
+ * Calculates a new size.
+ * This is called, when the actual buffer is too small.
  * This does NOT allocate a new Buffer.
  */
 size_t calcNewSize() {
@@ -69,8 +70,9 @@ void copyBuffer(char* from, char* to) {
  * and copies the content to the new buffer.
  */
 void enlargeBuffer() {
-	size_t newBuffSize = calcNewSize();
+	size_t newBuffSize = calcNewSize()      ;
 	char * newBuffer   = malloc(newBuffSize);
+
 	copyBuffer(BUFFER, newBuffer);
 	BUFFSIZE = newBuffSize;
 	free(BUFFER);
