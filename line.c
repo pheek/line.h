@@ -22,7 +22,7 @@ char* BUFFER; // holds linesize + 1 // null terminator
 /**
  * Size of the buffer in bytes.
  */
-int BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
+size_t BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
 
 
 /**
@@ -32,7 +32,7 @@ int BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
  * to give the allocated memory back to the heap.
  */
 void initBuffer() {
-	BUFFSIZE = INITIAL_LINE_SIZE+1     ; // space for 0-terminator 
+	BUFFSIZE = INITIAL_LINE_SIZE+sizeof(char); // space for 0-terminator 
 	BUFFER   = (char*) malloc((sizeof(char)) * BUFFSIZE); 
 }
 
@@ -45,7 +45,7 @@ void initBuffer() {
 size_t calcNewSize() {
 	size_t newSize = BUFFSIZE * (100 + ENLARGE_PERCENTAGE) / 100;
 	if(newSize <= BUFFSIZE) {
-		newSize = BUFFSIZE + 1;
+		newSize = BUFFSIZE + sizeof(char);
 	}
 	//printf("DEBUG: new size calculated: %ld\n", (long) newSize);
 	return newSize;
@@ -60,7 +60,7 @@ size_t calcNewSize() {
  * I didn't even open my book, which I still have!
  */
 void copyBuffer(char* from, char* to) {
-	from[BUFFSIZE-1]=0; // ensure buffer end; so the while will terminate.
+	from[BUFFSIZE-sizeof(char)]=0; // ensure buffer end; so the while will terminate.
 	while(*to++ = *from++) {}
 }
 
@@ -87,7 +87,7 @@ void enlargeBuffer() {
  *                      buffer, which must be one character larger).
  */
 void ensureCapacity(size_t requestedLineLength) {
-	size_t requestedBufferSize = requestedLineLength + 1;
+	size_t requestedBufferSize = requestedLineLength + sizeof(char);
 	if(BUFFSIZE < requestedBufferSize) {
 		enlargeBuffer();
 	}
@@ -102,7 +102,7 @@ char* get_line(FILE *filePointer) {
 	int pos = 0;
 	int getcResult = getc(filePointer);
 	while((EOF != getcResult) && ('\n' != getcResult)) {
-		ensureCapacity(pos+1);
+		ensureCapacity(pos+sizeof(char));
 		BUFFER[pos++] = (char) getcResult;
 		getcResult = getc(filePointer);
 	}
