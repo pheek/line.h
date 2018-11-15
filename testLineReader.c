@@ -13,7 +13,7 @@ void main(void) {
 	int   lineNumber = 1;
 	char* line = get_line(stdin);
 	while(line != NULL) {
-		printf("\n%d. Zeile: [[%s]]", lineNumber, line);
+		printf("\n%3d. Zeile: [[%s]]", lineNumber, line);
 		line = get_line(stdin);
 		lineNumber = lineNumber + 1;
 	}

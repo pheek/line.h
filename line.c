@@ -33,7 +33,7 @@ int BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
  */
 void initBuffer() {
 	BUFFSIZE = INITIAL_LINE_SIZE+1     ; // space for 0-terminator 
-	BUFFER   = (char*) malloc(BUFFSIZE); 
+	BUFFER   = (char*) malloc((sizeof(char)) * BUFFSIZE); 
 }
 
 
@@ -71,7 +71,7 @@ void copyBuffer(char* from, char* to) {
  */
 void enlargeBuffer() {
 	size_t newBuffSize = calcNewSize()      ;
-	char * newBuffer   = malloc(newBuffSize);
+	char * newBuffer   = malloc((sizeof(char)) * newBuffSize);
 
 	copyBuffer(BUFFER, newBuffer);
 	BUFFSIZE = newBuffSize;
@@ -80,9 +80,15 @@ void enlargeBuffer() {
 }
 
 
-void ensureCapacity(size_t geforderteLineLength) {
-	size_t geforderteBufferGroesse = geforderteLineLength + 1;
-	if(BUFFSIZE < geforderteLineLength+1) {
+/**
+ * Check, if the buffer has a requested length.
+ * If not, enlarge the buffer.
+ * @requestedLineLength the length of a line (not the lenght of the 
+ *                      buffer, which must be one character larger).
+ */
+void ensureCapacity(size_t requestedLineLength) {
+	size_t requestedBufferSize = requestedLineLength + 1;
+	if(BUFFSIZE < requestedBufferSize + 1) {
 		enlargeBuffer();
 	}
 }
