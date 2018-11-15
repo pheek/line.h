@@ -5,9 +5,9 @@
  * @host   https://github.com/pheek/line.h
  */
 
-// Nur, damit line.h nich mehrfach "include"t wird:
+// Don't include twice
 #ifndef  LINE_H
-// line.h enthält die Funktionsheader (und Konstanten)
+// line.h contains the function header and constants.
 #include "line.h"
 
 /**
@@ -16,11 +16,13 @@
  * If the BUFFER should be too small, it will be enlarged
  * automatically, like a Java-ArrayList.
  */
-char* BUFFER      ; // holds linesize + 1 // null terminator
+char* BUFFER; // holds linesize + 1 // null terminator
+
+
 /**
  * Size of the buffer in bytes.
  */
-int   BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
+int BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
 
 
 /**
@@ -30,9 +32,10 @@ int   BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
  * to give the allocated memory back to the heap.
  */
 void initBuffer() {
-	BUFFER   = (char*) malloc(INITIAL_LINE_SIZE+1); // allow 
+	BUFFER   = (char*) malloc(INITIAL_LINE_SIZE+1); // allow
 	BUFFSIZE = INITIAL_LINE_SIZE+1;
 }
+
 
 /**
  * Calculates a new size, if the buffer is too small.
@@ -60,6 +63,7 @@ void copyBuffer(char* from, char* to) {
 	while(*to++ = *from++) {}
 }
 
+
 /**
  * As an ArrayList in Java, this enlages the buffer
  * and copies the content to the new buffer.
@@ -81,6 +85,7 @@ void ensureCapacity(size_t geforderteLineLength) {
 	}
 }
 
+
 // see line.h
 char* get_line(FILE *filePointer) {
 	if(0 == BUFFSIZE) { // not initialized yet
@@ -90,20 +95,21 @@ char* get_line(FILE *filePointer) {
 	int getcResult = getc(filePointer);
 	while((EOF != getcResult) && ('\n' != getcResult)) {
 		ensureCapacity(pos+1);
-		BUFFER[pos] = (char) getcResult;
-		pos++;
+		BUFFER[pos++] = (char) getcResult;
 		getcResult = getc(filePointer);
 	}
-	if(EOF == getcResult) {
+	if(EOF == getcResult && 0 == pos) {
 		return NULL;
 	}
 	BUFFER[pos] = 0;
 	return BUFFER;
 }
 
+
 // see line.h
 void freeBuffer() {
 	free(BUFFER);
 }
+
 
 #endif
