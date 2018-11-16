@@ -108,23 +108,37 @@ void ensureCapacity(size_t requestedLineLength) {
 }
 
 
-// see line.h
+
+/**
+ * the following algorithm is not able to see, if the last line
+ * just ended on '\n' or on an EOF. 
+ * To solve this, it should store the last '\n' in a global variable.
+ * If an EOF follows any character other than '\n', the last
+ * NewLine was omitted. 
+ * In other words:
+ * Because this algorithm never adds the '\n'-char to the lines read,
+ * it is for the user not possible to distinguish if the last Line contained
+ * '\n' or not.
+ * Because this is normally not a problem, I omitted this case.
+ * But be aware: It is not possible, to reconstruct a file correctly,
+ * if handled by this algorihtm.
+ */
+// usage: see line.h
 char* get_line(FILE *filePointer) {
 	if(0 == BUFFSIZE) { // not initialized yet
 		initBuffer();
 	}
 	int pos = 0;
 	int getcResult = getc(filePointer);
-	if(EOF == getcResult) {
-		freeBuffer();
-		return NULL;
-	}
 	while((EOF != getcResult) && ('\n' != getcResult)) {
 		ensureCapacity(pos+sizeof(char));
 		BUFFER[pos++] = (char) getcResult;
 		getcResult = getc(filePointer);
 	}
 	BUFFER[pos] = 0;
+	if(EOF == getcResult) { 
+		freeBuffer();
+	}
 	return BUFFER;
 }
 
