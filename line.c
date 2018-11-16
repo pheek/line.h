@@ -18,7 +18,7 @@
  * If the BUFFER should be too small, it will be enlarged
  * automatically, like a Java-ArrayList.
  */
-char* BUFFER; // holds linesize + 1 // null terminator
+char* BUFFER = NULL; // holds linesize + 1 // null terminator
 
 
 /**
@@ -46,7 +46,9 @@ void initBuffer() {
 void freeBuffer() {
 	//printf("DEBUG line.c:freeBuffer() -- freeing buffer");
 	BUFFSIZE = 0;
-	free(BUFFER);
+	if(NULL != BUFFER) {
+		free(BUFFER);
+	}
 	BUFFER = NULL;
 }
 
