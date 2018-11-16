@@ -20,7 +20,7 @@
  *  Least number of chars per Line
  *  Buffer will be 1 char larger to hold the 0-terminator.
  */
-#define INITIAL_LINE_SIZE  3
+#define INITIAL_LINE_SIZE  7
 
 /**
  * Encrease Percentage if a line longer than the
@@ -31,7 +31,7 @@
  * the new buffer hold 12 chars (incl. line terminator);
  * this is 11 chars for max line length.
  */
-#define ENLARGE_PERCENTAGE 200
+#define ENLARGE_PERCENTAGE 50
 
 /**
  * get_line() reads a line into a BUFFER. A pointer to this Buffer
@@ -46,9 +46,5 @@
  */
 char* get_line(FILE *filePointer);
 
-/**
- * Free Memory of the Buffer.
- * Call this at the end of your program.
- */
-void freeBuffer();
+
 #endif

@@ -7,8 +7,10 @@
 
 // Don't include twice
 #ifndef  LINE_H
-// line.h contains the function header and constants.
+
+// line.h contains the function header "get_line()" and constants.
 #include "line.h"
+
 
 /**
  * The following buffer contains enough space to hold a
@@ -32,8 +34,20 @@ size_t BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
  * to give the allocated memory back to the heap.
  */
 void initBuffer() {
+	//	printf("DEBUG line.c:initBuffer() -- initialize Buffer");
 	BUFFSIZE = INITIAL_LINE_SIZE+sizeof(char); // space for 0-terminator 
 	BUFFER   = (char*) malloc((sizeof(char)) * BUFFSIZE); 
+}
+
+
+/** Free the Buffer, when EOF reached.
+ * This is only done, when the last line was empty and an eof was found.
+ */
+void freeBuffer() {
+	//printf("DEBUG line.c:freeBuffer() -- freeing buffer");
+	BUFFSIZE = 0;
+	free(BUFFER);
+	BUFFER = NULL;
 }
 
 
@@ -47,7 +61,7 @@ size_t calcNewSize() {
 	if(newSize <= BUFFSIZE) {
 		newSize = BUFFSIZE + sizeof(char);
 	}
-	//printf("DEBUG: new size calculated: %ld\n", (long) newSize);
+	//printf("DEBUG line.c:calcNewSize() -- new size calculated: %ld\n", (long) newSize);
 	return newSize;
 }
 
@@ -101,22 +115,17 @@ char* get_line(FILE *filePointer) {
 	}
 	int pos = 0;
 	int getcResult = getc(filePointer);
+	if(EOF == getcResult) {
+		freeBuffer();
+		return NULL;
+	}
 	while((EOF != getcResult) && ('\n' != getcResult)) {
 		ensureCapacity(pos+sizeof(char));
 		BUFFER[pos++] = (char) getcResult;
 		getcResult = getc(filePointer);
 	}
-	if(EOF == getcResult && 0 == pos) {
-		return NULL;
-	}
 	BUFFER[pos] = 0;
 	return BUFFER;
-}
-
-
-// see line.h
-void freeBuffer() {
-	free(BUFFER);
 }
 
 

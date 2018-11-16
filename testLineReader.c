@@ -18,7 +18,4 @@ void main(void) {
 		lineNumber = lineNumber + 1;
 	}
 	printf("\n\nZeilen total: %d\n", (lineNumber -1));
-	
-	// free memory
-	freeBuffer();
 }
