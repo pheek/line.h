@@ -1,7 +1,7 @@
 /**
  * Santis
  * @author philipp.gressly@santismail.ch
- * @date   2018-11-13
+ * @date   2018-11-16
  */
 
 #include <stdio.h>
@@ -11,11 +11,10 @@
 void main(void) {
 	// Test: Zähle die Zeilen, starte mit 1.
 	int   lineNumber = 0;
-	char* line = get_line(stdin);
-	while(line != NULL) {
+	char* line;
+	while((line = get_line(stdin)) != NULL) {
 		lineNumber = lineNumber + 1;
 		printf("\n%3d. Zeile: [[%s]]", lineNumber, line);
-		line = get_line(stdin);
 	}
 	printf("\n\nZeilen total: %d\n", (lineNumber));
 }

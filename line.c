@@ -11,6 +11,8 @@
 // line.h contains the function header "get_line()" and constants.
 #include "line.h"
 
+#define FALSE  0
+#define TRUE  -1
 
 /**
  * The following buffer contains enough space to hold a
@@ -26,6 +28,9 @@ char* BUFFER = NULL; // holds linesize + 1 // null terminator
  */
 size_t BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
 
+char * LASTLINE = "";       // return this empty line, if '\n' found at last line.
+int LAST_LINE_RETURNED = FALSE;
+
 
 /**
  * You don't have to call this, because it is done automatically,
@@ -36,7 +41,8 @@ size_t BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
 void initBuffer() {
 	//	printf("DEBUG line.c:initBuffer() -- initialize Buffer");
 	BUFFSIZE = INITIAL_LINE_SIZE+sizeof(char); // space for 0-terminator 
-	BUFFER   = (char*) malloc((sizeof(char)) * BUFFSIZE); 
+	BUFFER   = (char*) malloc((sizeof(char)) * BUFFSIZE);
+	LAST_LINE_RETURNED = FALSE;
 }
 
 
@@ -45,6 +51,7 @@ void initBuffer() {
  */
 void freeBuffer() {
 	//printf("DEBUG line.c:freeBuffer() -- freeing buffer");
+	LAST_LINE_RETURNED = TRUE;
 	BUFFSIZE = 0;
 	if(NULL != BUFFER) {
 		free(BUFFER);
@@ -132,14 +139,22 @@ char* get_line(FILE *filePointer) {
 	}
 	int pos = 0;
 	int getcResult = getc(filePointer);
+	if(EOF==getcResult) {
+		if(LAST_LINE_RETURNED) {
+			freeBuffer();
+			return 0;
+		}
+		LAST_LINE_RETURNED = TRUE;
+		return LASTLINE;
+	}
 	while((EOF != getcResult) && ('\n' != getcResult)) {
 		ensureCapacity(pos+sizeof(char));
 		BUFFER[pos++] = (char) getcResult;
 		getcResult = getc(filePointer);
 	}
 	BUFFER[pos] = 0;
-	if(EOF == getcResult) { 
-		freeBuffer();
+	if(EOF == getcResult) {
+		LAST_LINE_RETURNED = TRUE;
 	}
 	return BUFFER;
 }
