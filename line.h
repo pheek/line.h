@@ -1,6 +1,7 @@
 /**
  * Reads a line from a file (or input stream).
- * Stops, when EOF (end of file) reached, or if "\n", the line-Terminator is reached.
+ * Stops, when EOF (end of file) reached, or if "\n",
+ * the line-terminator is reached.
  *
  * @author phi@gress.ly
  * @date   2018-11-15
@@ -49,9 +50,9 @@ char* get_line(FILE *filePointer);
 
 /** 
  * Call this, if you stop the reading.
- * Usually, the freeBuffer is done automatically after an EOF (end of file)
- * was reached. 
- * Sometimes, you don't want to read a whole file, and then you must 
+ * The freeBuffer is done automatically after an EOF (end of file)
+ * was reached.
+ * Sometimes, you don't want to read a whole file, and then you must
  * free the buffer to give the heap-memory back to the system.
  */
 void freeBuffer();

@@ -1,5 +1,5 @@
 /**
- * Line-Reader (for any line length in the input file)
+ * Line-Reader (for any line length in the input files)
  * @author phi@gress.ly
  * @date   2018-11-15
  * @host   https://github.com/pheek/line.h
@@ -28,8 +28,9 @@ char* BUFFER = NULL; // holds linesize + 1 // null terminator
  */
 size_t BUFFSIZE = 0; // if "0", this means, the buffer is not yet allocated
 
-char * LASTLINE = "";       // return this empty line, if '\n' found at last line.
-int LAST_LINE_RETURNED = FALSE;
+      // return this empty line, if '\n' found at last line.
+char * LASTLINE           = ""   ;
+int    LAST_LINE_RETURNED = FALSE;
 
 
 /**
@@ -40,7 +41,7 @@ int LAST_LINE_RETURNED = FALSE;
  */
 void initBuffer() {
 	//	printf("DEBUG line.c:initBuffer() -- initialize Buffer");
-	BUFFSIZE = INITIAL_LINE_SIZE+sizeof(char); // space for 0-terminator 
+	BUFFSIZE = INITIAL_LINE_SIZE+sizeof(char); // space for 0-terminator
 	BUFFER   = (char*) malloc((sizeof(char)) * BUFFSIZE);
 	LAST_LINE_RETURNED = FALSE;
 }
@@ -78,7 +79,7 @@ size_t calcNewSize() {
 /**
  * Copy the old buffer to the new.
  * This old Kernighan/Ritche Trick stayed in my
- * brain since about 35 years. I have not 
+ * brain since about 35 years. I have not
  * forgotten, what these clever guys did!
  * I didn't even open my book, which I still have!
  */
@@ -106,7 +107,7 @@ void enlargeBuffer() {
 /**
  * Check, if the buffer has a requested length.
  * If not, enlarge the buffer.
- * @requestedLineLength the length of a line (not the lenght of the 
+ * @requestedLineLength the length of a line (not the lenght of the
  *                      buffer, which must be one character larger).
  */
 void ensureCapacity(size_t requestedLineLength) {
@@ -120,10 +121,10 @@ void ensureCapacity(size_t requestedLineLength) {
 
 /**
  * the following algorithm is not able to see, if the last line
- * just ended on '\n' or on an EOF. 
+ * just ended on '\n' or on an EOF.
  * To solve this, it should store the last '\n' in a global variable.
  * If an EOF follows any character other than '\n', the last
- * NewLine was omitted. 
+ * NewLine was omitted.
  * In other words:
  * Because this algorithm never adds the '\n'-char to the lines read,
  * it is for the user not possible to distinguish if the last Line contained
