@@ -34,10 +34,12 @@ int    LAST_LINE_RETURNED = FALSE;
 
 
 /**
- * You don't have to call this, because it is done automatically,
- * if the BUFFSIZE is still 0.
+ * You don't have to call the following "intiBuffer()"-function,
+ * because it is done automatically, if the BUFFSIZE is 0 (zero).
  * But you should call "freeBuffer()" at the end of your program,
- * to give the allocated memory back to the heap.
+ * when you stop reading in the middle of a stream.
+ * If your program reaches the EOF (end of file), you don't have
+ * to call either of both methods.
  */
 void initBuffer() {
 	//	printf("DEBUG line.c:initBuffer() -- initialize Buffer");
@@ -47,8 +49,14 @@ void initBuffer() {
 }
 
 
-/** Free the Buffer, when EOF reached.
- * This is only done, when the last line was empty and an eof was found.
+/** 
+ * Free the Buffer, when EOF reached.
+ * This is only done, when the last line was empty and an 
+ * EOF (end of file) was found.
+ * You have to call this, when you stop reading in the middle
+ * of a file to free the Memory.
+ * If you reach the EOF using "get_line()", this is called
+ * automatically.
  */
 void freeBuffer() {
 	//printf("DEBUG line.c:freeBuffer() -- freeing buffer");
@@ -56,8 +64,8 @@ void freeBuffer() {
 	BUFFSIZE = 0;
 	if(NULL != BUFFER) {
 		free(BUFFER);
+		BUFFER = NULL;
 	}
-	BUFFER = NULL;
 }
 
 
