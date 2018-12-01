@@ -6,6 +6,7 @@
  * @author phi@gress.ly
  * @date   2018-11-15
  * @host   https://github.com/pheek/line.h
+ * This code lies under the GPL: http://www.gnu.org/licenses/gpl-3.0.en.html
  */
 
 #ifndef  LINE_H
